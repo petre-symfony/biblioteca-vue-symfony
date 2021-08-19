@@ -1,6 +1,11 @@
 import axios from 'axios'
 
-export function fetchBooks(){
+export function fetchBooks(page){
+  const params = {}
 
-  return axios.get('/api/books')
+  if (page) {
+    params.page = page
+  }
+
+  return axios.get('/api/books', {params})
 }

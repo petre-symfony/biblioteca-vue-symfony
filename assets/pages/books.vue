@@ -139,24 +139,49 @@
         </div>
       </div>
     </div>
+    <paginator
+        v-if="!loading && lastBooksPage > 1"
+        :current-page="currentPage"
+        :last-items-page="lastBooksPage"
+        @change-current-page="updateCurrentPage($event.currentPage)"
+    />
   </div>
 </template>
 
 <script>
 import { fetchBooks } from '@/services/books-service'
+import Paginator from '@/components/paginator'
 
 export default {
   name: "books",
+  components: {
+    Paginator,
+  },
   data(){
     return {
-      books: []
+      books: [],
+      loading: false,
+      lastBooksPage: 1,
+      currentPage: 1
     }
   },
   methods: {
+    updateCurrentPage(currentPage) {
+      this.currentPage = currentPage
+      this.loadBooks(this.currentPage)
+
+    },
     async loadBooks(){
+      this.loading = true
       const response = await fetchBooks(this.currentPage)
 
+      this.loading = false
       this.books = response.data['hydra:member']
+      if (response.data['hydra:view']['hydra:last']) {
+        const textLinkLastPage = response.data['hydra:view']['hydra:last']
+        const textLastPage = /page=\d+/.exec(textLinkLastPage)
+        this.lastBooksPage = parseInt((/\d+/.exec(textLastPage[0]))[0])
+      }
     }
   },
   created() {

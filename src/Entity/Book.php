@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ORM\Entity(repositoryClass=BookRepository::class)
@@ -15,6 +17,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *   normalizationContext={"groups"={"book:read"}},
  *   attributes={"pagination_items_per_page"=10}
  * )
+ * @ApiFilter(SearchFilter::class, properties={
+ *   "authors": "exact"
+ * })
  */
 class Book {
   /**

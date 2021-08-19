@@ -130,7 +130,8 @@
             <ul class="list-group flex-md-row flex-md-wrap justify-content-md-center">
               <li
                   v-for="author in book.authors"
-                  class="list-group-item"
+                  class="list-group-item btn btn-primary"
+                  @click="loadBooksByAuthor(author['@id'], 1)"
               >
                 {{ author.fullName }}
               </li>
@@ -149,7 +150,7 @@
 </template>
 
 <script>
-import { fetchBooks } from '@/services/books-service'
+import { fetchBooks, fetchBooksByAuthor } from '@/services/books-service'
 import Paginator from '@/components/paginator'
 
 export default {
@@ -162,13 +163,18 @@ export default {
       books: [],
       loading: false,
       lastBooksPage: 1,
-      currentPage: 1
+      currentPage: 1,
+      authorLink: null
     }
   },
   methods: {
     updateCurrentPage(currentPage) {
       this.currentPage = currentPage
-      this.loadBooks(this.currentPage)
+      if (!this.authorLink) {
+        this.loadBooks(this.currentPage)
+      } else {
+        this.loadBooksByAuthor(this.authorLink, this.currentPage)
+      }
 
     },
     async loadBooks(){
@@ -181,6 +187,22 @@ export default {
         const textLinkLastPage = response.data['hydra:view']['hydra:last']
         const textLastPage = /page=\d+/.exec(textLinkLastPage)
         this.lastBooksPage = parseInt((/\d+/.exec(textLastPage[0]))[0])
+      }
+    },
+    async loadBooksByAuthor(authorLink, currentPage){
+      this.loading = true
+      this.authorLink = authorLink;
+      const response = await fetchBooksByAuthor(authorLink, currentPage)
+
+      this.loading = false
+      this.books = response.data['hydra:member']
+
+      if (response.data['hydra:view']['hydra:last']) {
+        const textLinkLastPage = response.data['hydra:view']['hydra:last']
+        const textLastPage = /page=\d+/.exec(textLinkLastPage)
+        this.lastBooksPage = parseInt((/\d+/.exec(textLastPage[0]))[0])
+      } else {
+        this.lastBooksPage = 1
       }
     }
   },

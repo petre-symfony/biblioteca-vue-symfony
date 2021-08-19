@@ -6,9 +6,12 @@ use App\Repository\AuthorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=AuthorRepository::class)
+ * @ApiResource(normalizationContext={"groups"={"author:read"}})
  */
 class Author {
   /**
@@ -20,36 +23,43 @@ class Author {
 
   /**
    * @ORM\Column(type="string", length=255)
+   * @Groups({"author:read", "book:read"})
    */
   private $fullName;
 
   /**
    * @ORM\Column(type="string", length=255, nullable=true)
+   * @Groups({"author:read"})
    */
   private $language;
 
   /**
    * @ORM\Column(type="string", length=255, nullable=true)
+   * @Groups({"author:read"})
    */
   private $nationality;
 
   /**
    * @ORM\Column(type="string", length=255, nullable=true)
+   * @Groups({"author:read"})
    */
   private $birthPlace;
 
   /**
    * @ORM\Column(type="date", nullable=true)
+   * @Groups({"author:read"})
    */
   private $birthDate;
 
   /**
    * @ORM\Column(type="date", nullable=true)
+   * @Groups({"author:read"})
    */
   private $diedDate;
 
   /**
    * @ORM\Column(type="string", length=255, nullable=true)
+   * @Groups({"author:read"})
    */
   private $diePlace;
 

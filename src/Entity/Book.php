@@ -6,9 +6,15 @@ use App\Repository\BookRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=BookRepository::class)
+ * @ApiResource(
+ *   normalizationContext={"groups"={"book:read"}},
+ *   attributes={"pagination_items_per_page"=10}
+ * )
  */
 class Book {
   /**
@@ -20,86 +26,103 @@ class Book {
 
   /**
    * @ORM\Column(type="string", length=255, options={"default": "unknown"})
+   * @Groups("book:read")
    */
   private $name;
 
   /**
    * @ORM\Column(type="string", length=255, nullable=true)
+   * @Groups({"book:read"})
    */
   private $location;
 
   /**
    * @ORM\Column(type="string", length=255, nullable=true)
+   * @Groups({"book:read"})
    */
   private $subject;
 
   /**
    * @ORM\ManyToMany(targetEntity=Author::class, inversedBy="books")
+   * @Groups({"book:read"})
    */
   private $authors;
 
   /**
    * @ORM\Column(type="integer", nullable=true)
+   * @Groups({"book:read"})
    */
   private $volume;
 
   /**
    * @ORM\Column(type="string", length=255, nullable=true)
+   * @Groups({"book:read"})
    */
   private $other;
 
   /**
    * @ORM\Column(type="integer", nullable=true)
+   * @Groups({"book:read"})
    */
   private $firstPublishedYear;
 
   /**
    * @ORM\Column(type="integer", nullable=true)
+   * @Groups({"book:read"})
    */
   private $bookPublishedYear;
 
   /**
    * @ORM\Column(type="string", length=30, nullable=true)
+   * @Groups({"book:read"})
    */
   private $ISBN;
 
   /**
    * @ORM\Column(type="boolean", nullable=true)
+   * @Groups({"book:read"})
    */
   private $complete;
 
   /**
    * @ORM\Column(type="string", length=255, nullable=true, options={"default": "NONE"})
+   * @Groups({"book:read"})
    */
   private $missingPages;
 
   /**
    * @ORM\Column(type="integer", nullable=true)
+   * @Groups({"book:read"})
    */
   private $pages;
 
   /**
    * @ORM\Column(type="string", length=255, nullable=true, options={"default": "romana"})
+   * @Groups({"book:read"})
    */
   private $language;
 
   /**
    * @ORM\Column(type="string", length=20, nullable=true)
+   * @Groups({"book:read"})
    */
   private $format;
 
   /**
    * @ORM\Column(type="text", nullable=true)
+   * @Groups({"book:read"})
    */
   private $content;
 
   /**
    * @ORM\ManyToMany(targetEntity=Publisher::class, inversedBy="books")
+   * @Groups({"book:read"})
    */
   private $publishers;
 
   /**
    * @ORM\ManyToOne(targetEntity=SubCategory::class, inversedBy="books")
+   * @Groups({"book:read"})
    */
   private $genre;
 

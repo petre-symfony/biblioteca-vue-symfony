@@ -6,9 +6,16 @@ use App\Repository\SubCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=SubCategoryRepository::class)
+ * @ApiResource(
+ *   normalizationContext={
+ *     "groups"={"subCategory:read"}
+ *   }
+ * )
  */
 class SubCategory {
   /**
@@ -20,11 +27,13 @@ class SubCategory {
 
   /**
    * @ORM\Column(type="string", length=255)
+   * @Groups({"subCategory:read", "book:read"})
    */
   private $name;
 
   /**
    * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="subCategories")
+   * @Groups({"subCategory:read"})
    */
   private $type;
 

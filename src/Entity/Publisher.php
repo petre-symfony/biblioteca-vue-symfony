@@ -6,9 +6,14 @@ use App\Repository\PublisherRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=PublisherRepository::class)
+ * @ApiResource(
+ *   normalizationContext={"groups"={"publisher:read"}}
+ * )
  */
 class Publisher {
   /**
@@ -20,6 +25,7 @@ class Publisher {
 
   /**
    * @ORM\Column(type="string", length=255)
+   * @Groups({"publisher:read", "book:read"})
    *
    */
   private $name;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="book in books" :class="[$style.component, 'card', 'm-2']">
+    <div v-for="book in books" :key="book['@id']" :class="[$style.component, 'card', 'm-2']">
       <p>{{ book.name }} <span v-if="book.volume"> - Volume {{ book.volume }}</span></p>
       <p v-if="book.subject">{{ book.subject }}</p>
       <div class="card-body d-flex flex-column content">
@@ -19,26 +19,61 @@
                 <ul class="list-group list-group-flush">
                   <li
                       v-for="editor in book.publishers"
+                      :key="editor['@id']"
                       class="list-group-item"
                   >
                     {{ editor.name }}
                   </li>
                 </ul>
               </div>
-              <a
-                  href="#"
+              <button
+                  type="button"
                   v-if="book.content"
                   class="btn btn-success"
+                  data-bs-toggle="modal"
+                  :data-bs-target="`#${book['@id'].replaceAll('/', '_')}`"
               >
                 Click to see summary
-              </a>
-              <a
-                  href="#"
+              </button>
+              <button
+                  type="button"
                   v-else="!book.content"
                   class="btn btn-primary"
               >
                 We have no summary details
-              </a>
+              </button>
+            </div>
+            <!-- Modal -->
+            <div
+                class="modal fade"
+                v-if="book.content"
+                :id="`${book['@id'].replaceAll('/', '_')}`"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+                tabIndex="-1"
+                :aria-labelledby="`label${book['@id'].replaceAll('/', '_')}`"
+                aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5
+                        class="modal title"
+                        :id="`label${book['@id'].replaceAll('/', '_')}`"
+                    >
+                      {{ book.name }}
+                      {{ book.volume ? ` volume ${book.volume}` : ''}}
+                      {{ book.authors && book.authors.length > 0 ? book.authors[0].fullName : ''}}
+                      {{ book.publishers && book.publishers.length > 0 ? book.publishers[0].name : '' }}
+                      {{ book.bookPublishedYear ? book.bookPublishedYear : ''}}
+                    </h5>
+                  </div>
+                  <div class="modal-body">{{ book.content }}</div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="card other-details">
@@ -47,13 +82,13 @@
               <ul class="list-group">
                 <li
                     class="list-group-item"
-                    v-if="book.complete && book.complete === true"
+                    v-if="book.volume && book.complete === true"
                 >
                   We have all volumes
                 </li>
                 <li
                     class="list-group-item"
-                    v-else-if="book.complete && book.complete === false"
+                    v-else-if="book.volume && book.complete === false"
                 >
                   Some volumes are missing
                 </li>
@@ -130,6 +165,7 @@
             <ul class="list-group flex-md-row flex-md-wrap justify-content-md-center">
               <li
                   v-for="author in book.authors"
+                  :key="author['@id']"
                   class="list-group-item btn btn-primary"
                   @click="loadBooksByAuthor(author['@id'], 1)"
               >

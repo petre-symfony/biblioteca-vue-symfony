@@ -51,24 +51,20 @@
                 data-bs-backdrop="static"
                 data-bs-keyboard="false"
                 tabIndex="-1"
-                :aria-labelledby="`label${book['@id'].replaceAll('/', '_')}`"
                 aria-hidden="true"
             >
               <div class="modal-dialog">
                 <div class="modal-content">
-                  <div class="modal-header">
-                    <h5
-                        class="modal title"
-                        :id="`label${book['@id'].replaceAll('/', '_')}`"
-                    >
+                  <div class="modal-body">
+                    <h5>
                       {{ book.name }}
                       {{ book.volume ? ` volume ${book.volume}` : ''}}
-                      {{ book.authors && book.authors.length > 0 ? book.authors[0].fullName : ''}}
-                      {{ book.publishers && book.publishers.length > 0 ? book.publishers[0].name : '' }}
-                      {{ book.bookPublishedYear ? book.bookPublishedYear : ''}}
+                      {{ book.authors && book.authors.length > 0 ? ' - ' + book.authors[0].fullName : ''}}
+                      {{ book.publishers && book.publishers.length > 0 ? ' - ' + book.publishers[0].name : '' }}
+                      {{ book.bookPublishedYear ? ' - ' + book.bookPublishedYear : ''}}
                     </h5>
+                    <tree :tree-data="getBookContentObject(book.content)" />
                   </div>
-                  <div class="modal-body">{{ book.content }}</div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   </div>
@@ -188,11 +184,13 @@
 <script>
 import { fetchBooks, fetchBooksByAuthor } from '@/services/books-service'
 import Paginator from '@/components/paginator'
+import Tree from '@/components/treeBookContent'
 
 export default {
   name: "books",
   components: {
     Paginator,
+    Tree
   },
   data(){
     return {
@@ -204,6 +202,10 @@ export default {
     }
   },
   methods: {
+    getBookContentObject(stringBookContent) {
+      const arrayBookContent = eval(stringBookContent)
+      return arrayBookContent[0]
+    },
     updateCurrentPage(currentPage) {
       this.currentPage = currentPage
       if (!this.authorLink) {

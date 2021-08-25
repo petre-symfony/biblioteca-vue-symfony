@@ -168,13 +168,22 @@
                 {{ author.fullName }}
               </li>
             </ul>
+            <div>
+              <button
+                  v-if="params.authors"
+                  class="btn btn-primary"
+                  @click="getAllBooks"
+              >
+                Click to see all books
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <paginator
         v-if="!loading && lastBooksPage > 1"
-        :current-page="currentPage"
+        :current-page="params.page"
         :last-items-page="lastBooksPage"
         @change-current-page="updateCurrentPage($event.currentPage)"
     />
@@ -197,8 +206,10 @@ export default {
       books: [],
       loading: false,
       lastBooksPage: 1,
-      currentPage: 1,
-      authorLink: null
+      params: {
+        authors: null,
+        page: 1
+      }
     }
   },
   methods: {
@@ -207,34 +218,16 @@ export default {
       return arrayBookContent[0]
     },
     updateCurrentPage(currentPage) {
-      this.currentPage = currentPage
-      if (!this.authorLink) {
-        this.loadBooks(this.currentPage)
-      } else {
-        this.loadBooksByAuthor(this.authorLink, this.currentPage)
-      }
-
+      this.params.page = currentPage
+      this.loadBooks()
     },
     async loadBooks(){
       this.loading = true
-      const response = await fetchBooks(this.currentPage)
+
+      const response = await fetchBooks(this.params)
 
       this.loading = false
       this.books = response.data['hydra:member']
-      if (response.data['hydra:view']['hydra:last']) {
-        const textLinkLastPage = response.data['hydra:view']['hydra:last']
-        const textLastPage = /page=\d+/.exec(textLinkLastPage)
-        this.lastBooksPage = parseInt((/\d+/.exec(textLastPage[0]))[0])
-      }
-    },
-    async loadBooksByAuthor(authorLink, currentPage){
-      this.loading = true
-      this.authorLink = authorLink;
-      const response = await fetchBooksByAuthor(authorLink, currentPage)
-
-      this.loading = false
-      this.books = response.data['hydra:member']
-
       if (response.data['hydra:view']['hydra:last']) {
         const textLinkLastPage = response.data['hydra:view']['hydra:last']
         const textLastPage = /page=\d+/.exec(textLinkLastPage)
@@ -242,6 +235,19 @@ export default {
       } else {
         this.lastBooksPage = 1
       }
+    },
+    loadBooksByAuthor(authorLink, currentPage=1){
+      this.params.authors = authorLink
+      this.params.page = currentPage
+
+
+      this.loadBooks()
+    },
+    getAllBooks() {
+      this.params.authors = null
+      this.params.page = 1
+
+      this.loadBooks()
     }
   },
   created() {
@@ -270,6 +276,10 @@ export default {
     .authors {
       width: 41rem;
       margin: 0.5rem auto
+    }
+
+    .authors .card-body div {
+      text-align: center;
     }
   }
 }

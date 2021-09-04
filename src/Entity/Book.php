@@ -10,6 +10,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\ApiPlatform\SearchInContentAndSubjectAndName;
 
 /**
  * @ORM\Entity(repositoryClass=BookRepository::class)
@@ -20,6 +21,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  * @ApiFilter(SearchFilter::class, properties={
  *   "authors": "exact"
  * })
+ * @ApiFilter(SearchInContentAndSubjectAndName::class)
  */
 class Book {
   /**

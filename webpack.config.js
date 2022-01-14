@@ -70,6 +70,12 @@ Encore
       config.modules.localIdentName = '[name]_[local]_[hash:base64:5]';
     }
   })
+  .copyFiles({
+  from: './assets/images',
+  to: Encore.isProduction()
+    ? 'images/[path][name].[hash:8].[ext]'
+    : 'images/[path][name].[ext]',
+})
 
 // uncomment if you use TypeScript
 //.enableTypeScriptLoader()

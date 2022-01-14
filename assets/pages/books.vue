@@ -26,23 +26,23 @@
                   </li>
                 </ul>
               </div>
-              <button
-                  type="button"
-                  v-if="book.content"
-                  class="btn btn-success"
-                  data-bs-toggle="modal"
-                  :data-bs-target="`#${book['@id'].replaceAll('/', '_')}`"
-              >
-                Click to see summary
-              </button>
-              <button
-                  type="button"
-                  v-else="!book.content"
-                  class="btn btn-primary"
-              >
-                We have no summary details
-              </button>
             </div>
+						<button
+							type="button"
+							v-if="book.content"
+							class="btn btn-success"
+							data-bs-toggle="modal"
+							:data-bs-target="`#${book['@id'].replaceAll('/', '_')}`"
+						>
+							Click to see summary
+						</button>
+						<button
+							type="button"
+							v-else
+							class="btn btn-primary"
+						>
+							We have no summary details
+						</button>
             <!-- Modal -->
             <div
                 class="modal fade"

@@ -23,6 +23,8 @@ Encore
    */
   .addEntry('app', './assets/app.js')
   .addEntry('books', './assets/books.js')
+  .addEntry('authors', './assets/authors.js')
+  .addEntry('publishers', './assets/publishers.js')
 
   // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
   //.enableStimulusBridge('./assets/controllers.json')

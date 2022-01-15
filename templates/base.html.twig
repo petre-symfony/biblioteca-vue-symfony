@@ -27,29 +27,22 @@
         </a>
 
         <ul class="navbar-nav">
-          {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                Log out
-              </a>
-            </li>
-          {% else %}
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                Log in
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                Register
-              </a>
-            </li>
-          {% endif %}
           <li class="nav-item">
-            <a class="nav-link" href="#">
-              Shopping Cart
+            <a class="nav-link" href="{{ path('app_book') }}">
+              Carti
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_author') }}">
+              Autori
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_publisher') }}">
+              Editori
+            </a>
+          </li>
+
         </ul>
       </nav>
     </header>

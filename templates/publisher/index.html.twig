@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-  <div id="app"></div>
+	<div id="app"></div>
 {% endblock %}
 
 {% block stylesheets %}
-  {{ parent() }}
+	{{ parent() }}
 
-  {{ encore_entry_link_tags('books') }}
+	{{ encore_entry_link_tags('publishers') }}
 {% endblock %}
 
 {% block javascripts %}
-  {{ parent() }}
+	{{ parent() }}
 
-  {{ encore_entry_script_tags('books') }}
+	{{ encore_entry_script_tags('publishers') }}
 {% endblock %}
